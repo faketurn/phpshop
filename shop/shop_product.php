@@ -8,12 +8,10 @@
 
 session_start();
 session_regenerate_id(true);
-if (isset($_SESSION['login']) === false) {
-    print("<p>ログインされていません。</p>");
-    print("<a href='../staff_login/staff_login.html'>ログイン画面へ</a>");
-    exit();
+if (isset($_SESSION['member_login']) === false) {
+    print("<p>ようこそゲスト様 <a href='../member_login.html'>会員ログイン画面へ</a>");
 } else {
-    print("<p>{$_SESSION['staff_name']}さん ログイン中</p>");
+    print("<p>ようこそ{$_SESSION['staff_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
 }
 
 ?>
@@ -49,11 +47,13 @@ try {
     $product_image_name = $result['image'];
     
     if ($product_image_name) {
-        $specific_image = "<img src='image/" . $product_image_name . "' alt=''>";
+        $specific_image = "<img src='../product/image/" . $product_image_name . "' alt=''>";
     } else {
         $specific_image = "";
     }
     // echo $product_name;
+    
+    print("<a href='shop_cart_in.php?productcode={$product_code}'>カートに入れる</a>");
     
 } catch (PDOException $e) {
     $error = $e->getMessage();

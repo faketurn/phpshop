@@ -4,20 +4,31 @@
 <meta charset="utf-8">
 <title>スタッフ登録完了 - 風農園</title>
 <link rel="stylesheet" href="../css/style.css">
+<?php
+
+session_start();
+session_regenerate_id(true);
+if (isset($_SESSION['login']) === false) {
+    print("<p>ログインされていません。</p>");
+    print("<a href='../staff_login/staff_login.html'>ログイン画面へ</a>");
+    exit();
+} else {
+    print("<p>{$_SESSION['staff_name']}さん ログイン中</p>");
+}
+
+?>
 </head>
 <body>
 <h1>スタッフ登録完了</h1>
 
 <?php
-
-function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, "utf-8");
-}
+require_once("../common/escape.php");
+$escaped = escape($_POST);
 
 try {
-    $staff_code = h($_POST['code']);
-    $staff_name = h($_POST['name']);
-    $staff_pass = h($_POST['pass']);
+    $staff_code = $escaped['code'];
+    $staff_name = $escaped['name'];
+    $staff_pass = $escaped['pass'];
     
     // データベースに接続する
     $dsn = "mysql:dbname=shop; host=127.0.0.1; charset=utf8mb4";

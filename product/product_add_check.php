@@ -4,25 +4,33 @@
 <meta charset="utf-8">
 <title>商品追加の確認 - 風農園</title>
 <link rel="stylesheet" href="../css/style.css">
+<?php
+
+session_start();
+session_regenerate_id(true);
+if (isset($_SESSION['login']) === false) {
+    print("<p>ログインされていません。</p>");
+    print("<a href='../staff_login/staff_login.html'>ログイン画面へ</a>");
+    exit();
+} else {
+    print("<p>{$_SESSION['staff_name']}さん ログイン中</p>");
+}
+
+?>
 </head>
 <body>
 <h1>商品追加の確認</h1>
 
 <?php
+require_once("../common/escape.php");
+$escaped = escape($_POST);
 
-function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, "utf-8");
-}
-
-$product_name = $_POST['name'];
-$product_price = $_POST['price'];
+$product_name = $escaped['name'];
+$product_price = $escaped['price'];
 $product_image = $_FILES['image'];
 // echo "<pre>";
 // var_dump($product_image);
 // echo "</pre>";
-
-$product_name = h($product_name);
-$product_price = h($product_price);
 
 
 if ($product_name) {

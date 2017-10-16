@@ -4,23 +4,30 @@
 <meta charset="utf-8">
 <title>スタッフ追加の確認 - 風農園</title>
 <link rel="stylesheet" href="../css/style.css">
+<?php
+
+session_start();
+session_regenerate_id(true);
+if (isset($_SESSION['login']) === false) {
+    print("<p>ログインされていません。</p>");
+    print("<a href='../staff_login/staff_login.html'>ログイン画面へ</a>");
+    exit();
+} else {
+    print("<p>{$_SESSION['staff_name']}さん ログイン中</p>");
+}
+
+?>
 </head>
 <body>
 <h1>スタッフ追加の確認</h1>
 
 <?php
+require_once("../common/escape.php");
+$escaped = escape($_POST);
 
-function h($str) {
-    return htmlspecialchars($str, ENT_QUOTES, "utf-8");
-}
-
-$staff_name = $_POST['name'];
-$staff_pass = $_POST['pass'];
-$staff_confirm_pass = $_POST['confirm_pass'];
-
-$staff_name = h($staff_name);
-$staff_pass = h($staff_pass);
-$staff_confirm_pass = h($staff_confirm_pass);
+$staff_name = $escaped['name'];
+$staff_pass = $escaped['pass'];
+$staff_confirm_pass = $escaped['confirm_pass'];
 
 if ($staff_name) {
     print("スタッフ名：{$staff_name}<br>");

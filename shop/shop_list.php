@@ -8,12 +8,10 @@
 
 session_start();
 session_regenerate_id(true);
-if (isset($_SESSION['login']) === false) {
-    print("<p>ログインされていません。</p>");
-    print("<a href='../staff_login/staff_login.html'>ログイン画面へ</a>");
-    exit();
+if (isset($_SESSION['member_login']) === false) {
+    print("<p>ようこそゲスト様 <a href='../member_login.html'>会員ログイン画面へ</a>");
 } else {
-    print("<p>{$_SESSION['staff_name']}さん ログイン中</p>");
+    print("<p>ようこそ{$_SESSION['staff_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
 }
 
 ?>
@@ -39,7 +37,6 @@ try {
     $stmt = $database_handle->prepare($sql);
     $stmt->execute();
     
-    print("<form method='post' action='product_branch.php'>");
     
     // fetchAllメソッドで全件取得したものを連想配列で保持する
     $rows = $stmt->fetchAll();
@@ -48,24 +45,10 @@ try {
     // echo "</pre>";
     
     foreach ($rows as $row) {
-        print("<label><input type='radio' name='productcode' value='" . $row['code'] . "'>");
+        print("<p><a href='shop_product.php?productcode=" . $row['code'] . "'>");
         print($row['name'] . "： ");
-        print($row['price'] . "円</label>");
+        print($row['price'] . "円</a></p>");
     }
-    
-    print("<input type='submit' name='specific' value='参照'><br>");
-    print("<input type='submit' name='add' value='追加'><br>");
-    print("<input type='submit' name='edit' value='修正'><br>");
-    print("<input type='submit' name='delete' value='削除'>");
-    print("</form>");
-    
-    // $sql = "select name, password from master_product where 1";
-    // $stmt = $database_handle->prepare($sql);
-    // $stmt->execute();
-    
-    // foreach ($stmt as $row) {
-    //     printf("<pre>%s lives in <br /></pre>\n", var_dump($row));
-    // }
     
 } catch (PDOException $e) {
     $error = $e->getMessage();
@@ -75,6 +58,5 @@ try {
 ?>
 
 
-<p><a href="../staff_login/staff_top.php">トップメニューヘ</a></p>
 </body>
 </html>
