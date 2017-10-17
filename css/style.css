@@ -13,6 +13,10 @@ h1 {
 label {
     display: block;
 }
+pre {
+    font-family: "メイリオ";
+    font-size: .8rem;
+}
 .change_image {
     display: flex;
 }

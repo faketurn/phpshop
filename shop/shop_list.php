@@ -50,6 +50,8 @@ try {
         print($row['price'] . "円</a></p>");
     }
     
+    print("<p><a href='shop_cart_look.php'>カートを見る</a></p>");
+    
 } catch (PDOException $e) {
     $error = $e->getMessage();
 }
