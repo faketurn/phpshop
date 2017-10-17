@@ -28,6 +28,14 @@ try {
         // カート2回目以降のセッション受け取る
         $cart = $_SESSION['cart'];
         $product_num = $_SESSION['product_num'];
+        if (in_array($product_code, $cart)) {
+            print("
+            <p>その商品はすでにカートに入っています</p>
+            <p><a href='shop_list.php'>商品一覧へ</a></p>
+            <p><a href='shop_cart_look.php'>カートを見る</a></p>
+            ");
+            exit();
+        }
     }
     $cart[] = $product_code;
     $product_num[] = 1;

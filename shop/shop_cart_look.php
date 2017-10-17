@@ -22,9 +22,23 @@ if (isset($_SESSION['member_login']) === false) {
 <?php
 try {
     // ユーザー入力からの値ではないので、あえてエスケープせずに代入する
-    $cart = $_SESSION['cart'];
-    $product_num = $_SESSION['product_num'];
-    $cart_max = count($cart);
+    if (isset($_SESSION['cart']) === true) {
+        $cart = $_SESSION['cart'];
+        $product_num = $_SESSION['product_num'];
+        $cart_max = count($cart);
+        $total_price = 0;
+    } else {
+        $cart_max = 0;
+    }
+    
+    if ($cart_max === 0) {
+        print("
+        <p>カートに商品が入っていません</p>
+        <p><a href='shop_list.php'>商品一覧へ戻る</a></p>
+        ");
+        exit();
+    }
+    
     // print("<pre>");
     // var_dump($cart);
     // print("</pre>");
@@ -63,6 +77,10 @@ try {
         print("カートは空です");
     }
     
+    for ($i=0; $i<$cart_max; $i++):
+        $total_price += $product_prices[$i] * $product_num[$i];
+    endfor;
+    
 } catch (PDOException $e) {
     $error = $e->getMessage();
 }
@@ -71,23 +89,33 @@ try {
 
 <form method="post" action="change_num.php">
 
+<table>
 <?php for ($i=0; $i<$cart_max; $i++): ?>
-<?= "<p>{$product_names[$i]}</p>
-<p>{$specific_images[$i]}</p>
-<p>{$product_prices[$i]}円
-<input type='text' name='product_num{$i}' value='" . $product_num[$i] . "'>個</p>
-<p>合計：" . $product_prices[$i] * $product_num[$i] . "円</p>
+<?= "
+<tr>
+<td class='table_image'>{$specific_images[$i]}</td>
+<td>{$product_names[$i]}</td>
+<td class='table_num'>{$product_prices[$i]}円</td>
+<td class='table_num'><input type='text' name='product_num{$i}' value='" . $product_num[$i] . "'>個</td>
+<td class='table_num'>" . $product_prices[$i] * $product_num[$i] . "円</td>
+<td class='table_delete'><input type='checkbox' name='delete" . $i . "'></td>
+</tr>
 
 
 " ?>
 <?php endfor; ?>
         
+</table>
 
+<p class="total_price">商品合計<span><?= $total_price; ?>円</span></p>
 
 <p><input type="hidden" name="cart_max" value="<?= $cart_max; ?>"></p>
+
 <p><input type="submit" value="数量変更"></p>
 <p><input type="button" onclick="history.back()" value="戻る"></p>
 </form>
+
+<p><a href="shop_form.php">ご購入手続きへ進む</a></p>
 
 </body>
 </html>
