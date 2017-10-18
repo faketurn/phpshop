@@ -62,7 +62,7 @@ try {
     // print_r($rows);
     
 } catch (PDOException $e) {
-    $error = $e->getMessage();
+    exit($error = $e->getMessage());
 }
 
 if ($product_image_name !== $product_image_name_old) {

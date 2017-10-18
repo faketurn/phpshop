@@ -82,7 +82,7 @@ try {
     endfor;
     
 } catch (PDOException $e) {
-    $error = $e->getMessage();
+    exit($error = $e->getMessage());
 }
 ?>
 

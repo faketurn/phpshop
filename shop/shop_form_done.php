@@ -81,39 +81,12 @@ try {
         
     }
     
-    $email_body .= "送料は無料です\n";
-    $email_body .= "--\n";
-    $email_body .= "代金は以下の口座にお振込みください\n";
-    $email_body .= "ろくまる銀行 やさい支店 普通口座 1234456789\n";
-    $email_body .= "入金の確認が取れ次第、梱包、発送させていただきます\n";
-    $email_body .= "**\n";
-    $email_body .= "あなざ県へぶん市りー町\n";
-    $email_body .= "電話 777-77-7777\n";
-    $email_body .= "**\n";
     
-    // print nl2br($email_body);
-    
-    $title = "ご注文ありがとうございます";
-    $header = "From:info@example.com";
-    $email_body = html_entity_decode($email_body, ENT_QUOTES, "utf-8");
-    mb_language("Japanese");
-    mb_internal_encoding('UTF-8');
-    mb_send_mail($email, $title, $email_body, $header);
-    
-    $title = "お客様から注文がありました";
-    $header = "From:{$email}";
-    $email_body = html_entity_decode($email_body, ENT_QUOTES, "utf-8");
-    mb_language("Japanese");
-    mb_internal_encoding('UTF-8');
-    mb_send_mail("info@example.com", $title, $email_body, $header);
-    
-    // ロック処理
-    // $sql = "lock tables data_sales write, data_sales_product write";
-    // $stmt = $database_handle->prepare($sql);
-    // $stmt->execute();
-    
-    $sql='LOCK TABLES data_sales WRITE,data_sales_product WRITE';
-    $stmt=$database_handle->prepare($sql);
+    // ロック処理 エミュレートをオンにしないとバインドできないようだ！？
+    $database_handle->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+
+    $sql = "lock tables data_sales write,data_sales_product write";
+    $stmt = $database_handle->prepare($sql);
     $stmt->execute();
     
     // 注文データ登録
@@ -147,16 +120,39 @@ try {
         $stmt->execute();
     }
     
-    // $sql = "unlock tables";
-    // $stmt = $database_handle->prepare($sql);
-    // $stmt->execute();
-    
-    $sql = 'UNLOCK TABLES';
-    $stmt=$database_handle->prepare($sql);
+    $sql = "unlock tables";
+    $stmt = $database_handle->prepare($sql);
     $stmt->execute();
     
+    
+    $email_body .= "送料は無料です\n";
+    $email_body .= "--\n";
+    $email_body .= "代金は以下の口座にお振込みください\n";
+    $email_body .= "ろくまる銀行 やさい支店 普通口座 1234456789\n";
+    $email_body .= "入金の確認が取れ次第、梱包、発送させていただきます\n";
+    $email_body .= "**\n";
+    $email_body .= "あなざ県へぶん市りー町\n";
+    $email_body .= "電話 777-77-7777\n";
+    $email_body .= "**\n";
+    
+    // print nl2br($email_body);
+    
+    $title = "ご注文ありがとうございます";
+    $header = "From:info@example.com";
+    $email_body = html_entity_decode($email_body, ENT_QUOTES, "utf-8");
+    mb_language("Japanese");
+    mb_internal_encoding('UTF-8');
+    mb_send_mail($email, $title, $email_body, $header);
+    
+    $title = "お客様から注文がありました";
+    $header = "From:{$email}";
+    $email_body = html_entity_decode($email_body, ENT_QUOTES, "utf-8");
+    mb_language("Japanese");
+    mb_internal_encoding('UTF-8');
+    mb_send_mail("info@example.com", $title, $email_body, $header);
+    
 } catch (PDOException $e) {
-    $error = $e->getMessage();
+    exit($error = $e->getMessage());
 }
 
 
