@@ -20,12 +20,26 @@ if (isset($_SESSION['login']) === false) {
 ?>
 </head>
 <body>
+    
+<?php
+require_once("../common/escape.php");
+?>
 <h1>ショップ管理トップメニュー</h1>
 
-<p><a href="../staff/staff_list.php">スタッフ管理</a></p>
-<p><a href="../product/product_list.php">商品管理</a></p>
-<p><a href="../order/order_download.php">注文ダウンロード</a></p>
-<p><a href="staff_logout.php">ログアウト</a></p>
+<p>ダウンロードしたい注文日を選んでください</p>
+
+<form method='post' action='order_download_done.php'>
+<?php pulldown_year(); ?>
+年
+
+<?php pulldown_month(); ?>
+月
+
+<?php pulldown_day(); ?>
+日
+
+<p><input type="submit" value="ダウンロード画面へ"></p>
+</form>
 
 </body>
 </html>
