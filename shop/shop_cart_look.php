@@ -11,7 +11,7 @@ session_regenerate_id(true);
 if (isset($_SESSION['member_login']) === false) {
     print("<p>ようこそゲスト様 <a href='../member_login.html'>会員ログイン画面へ</a>");
 } else {
-    print("<p>ようこそ{$_SESSION['staff_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
+    print("<p>ようこそ{$_SESSION['member_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
 }
 
 ?>
@@ -116,6 +116,12 @@ try {
 </form>
 
 <p><a href="shop_form.php">ご購入手続きへ進む</a></p>
+
+<?php
+if (isset($_SESSION['member_login']) === true) {
+    print("<p><a href='shop_easy_check.php'>会員簡単注文へ進む</a></p>");
+}
+?>
 
 </body>
 </html>

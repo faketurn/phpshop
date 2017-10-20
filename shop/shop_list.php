@@ -9,9 +9,9 @@
 session_start();
 session_regenerate_id(true);
 if (isset($_SESSION['member_login']) === false) {
-    print("<p>ようこそゲスト様 <a href='../member_login.html'>会員ログイン画面へ</a>");
+    print("<p>ようこそゲスト様 <a href='member_login.html'>会員ログイン画面へ</a>");
 } else {
-    print("<p>ようこそ{$_SESSION['staff_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
+    print("<p>ようこそ{$_SESSION['member_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
 }
 
 ?>
@@ -28,7 +28,6 @@ try {
         "",
         array (
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_EMULATE_PREPARES => false,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         )
     );
@@ -53,7 +52,7 @@ try {
     print("<p><a href='shop_cart_look.php'>カートを見る</a></p>");
     
 } catch (PDOException $e) {
-    $error = $e->getMessage();
+    exit($error = $e->getMessage());
 }
 
 

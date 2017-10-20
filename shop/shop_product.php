@@ -11,7 +11,7 @@ session_regenerate_id(true);
 if (isset($_SESSION['member_login']) === false) {
     print("<p>ようこそゲスト様 <a href='../member_login.html'>会員ログイン画面へ</a>");
 } else {
-    print("<p>ようこそ{$_SESSION['staff_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
+    print("<p>ようこそ{$_SESSION['member_name']}様 <a href='member_logout.php'>ログアウト</a></p>");
 }
 
 ?>

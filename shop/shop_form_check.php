@@ -19,6 +19,11 @@ $postal1 = $post['postal1'];
 $postal2 = $post['postal2'];
 $address = $post['address'];
 $tel = $post['tel'];
+$chumon = $post['chumon'];
+$pass = $post['pass'];
+$pass2 = $post['pass2'];
+$sex = $post['sex'];
+$birth = $post['birth'];
 
 $flag = true;
 
@@ -62,6 +67,30 @@ if (!preg_match('/^\d{2,5}-?\d{2,5}-?\d{4,5}$/', $tel)) {
     print("<p>電話番号：{$tel}</p>");
 }
 
+if ($chumon === "chumontouroku") {
+    if ($pass === "") {
+        print("<p>パスワードを入力してください</p>");
+        $flag = false;
+    }
+    
+    if ($pass !== $pass2) {
+        print("<p>パスワードが一致しません</p>");
+        $flag = false;
+    }
+    
+    print("<p>性別：");
+    if ($sex == "male") {
+        print("男性</p>");
+    } else {
+        print("女性</p>");
+    }
+    
+    print("
+    <p>生まれ年<br>
+    {$birth}年代</p>
+    ");
+}
+
 
 if ($flag) {
     print("
@@ -72,6 +101,10 @@ if ($flag) {
     <p><input type='hidden' name='postal2' value='{$postal2}'></p>
     <p><input type='hidden' name='address' value='{$address}'></p>
     <p><input type='hidden' name='tel' value='{$tel}'></p>
+    <p><input type='hidden' name='chumon' value='{$chumon}'></p>
+    <p><input type='hidden' name='pass' value='{$pass}'></p>
+    <p><input type='hidden' name='sex' value='{$sex}'></p>
+    <p><input type='hidden' name='birth' value='{$birth}'></p>
     <p><input type='button' onclick='history.back()' value='戻る'></p>
     <p><input type='submit' value='OK'></p>
     
@@ -84,6 +117,7 @@ if ($flag) {
     </form>
     ");
 }
+
 ?>
 </body>
 </html>

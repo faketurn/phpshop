@@ -1,6 +1,13 @@
 <?php
 session_start();
 session_regenerate_id(true);
+if (isset($_SESSION['member_login']) === false) {
+    print("
+    <p>ログインされていません</p>
+    <p><a href='shop_list.php'>商品一覧へ</a></p>
+    ");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,10 +33,6 @@ try {
     $postal2 = $post['postal2'];
     $address = $post['address'];
     $tel = $post['tel'];
-    $chumon = $post['chumon'];
-    $pass = $post['pass'];
-    $sex = $post['sex'];
-    $birth = $post['birth'];
     
     print("
     <p>{$customer_name}様</p>
@@ -89,32 +92,7 @@ try {
     $stmt->execute();
     
     // 会員データ登録
-    $last_member_code = 0;
-    if ($chumon === "chumontouroku") {
-        $sql = "insert into data_member (password, name, email, postal1, postal2, address, tel, sex, born) values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = $database_handle->prepare($sql);
-        $stmt->bindValue(1, md5($pass));
-        $stmt->bindValue(2, $customer_name);
-        $stmt->bindValue(3, $email);
-        $stmt->bindValue(4, $postal1);
-        $stmt->bindValue(5, $postal2);
-        $stmt->bindValue(6, $address);
-        $stmt->bindValue(7, $tel);
-        if ($sex == "male") {
-            $stmt->bindValue(8, 1);
-        } else {
-            $stmt->bindValue(8, 2);
-        }
-        $stmt->bindValue(9, $birth);
-        $stmt->execute();
-        
-        $sql = "select last_insert_id()";
-        $stmt = $database_handle->prepare($sql);
-        $stmt->execute();
-        
-        $result = $stmt->fetch();
-        $last_member_code = $result['last_insert_id()'];
-    }
+    $last_member_code = $_SESSION['member_code'];
     
     // 注文データ登録
     $sql = "insert into data_sales (code_member, name, email, postal1, postal2, address, tel) values (?, ?, ?, ?, ?, ?, ?)";
@@ -151,13 +129,6 @@ try {
     $stmt = $database_handle->prepare($sql);
     $stmt->execute();
     
-    if ($chumon === "chumontouroku") {
-        print("
-        <p>会員登録が完了いたしました</p>
-        <p>次回からメールアドレスとパスワードでログインしてください</p>
-        <p>ご注文が簡単にできるようになります</p>
-        ");
-    }
     
     
     $email_body .= "送料は無料です\n";
@@ -170,13 +141,6 @@ try {
     $email_body .= "電話 777-77-7777\n";
     $email_body .= "**\n";
     
-    if ($chumon === "chumontouroku") {
-        $email_body .= "
-        会員登録が完了いたしました\n
-        次回からメールアドレスとパスワードでログインしてください\n
-        ご注文が簡単にできるようになります\n
-        ";
-    }
     
     // print nl2br($email_body);
     
